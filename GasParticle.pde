@@ -14,8 +14,10 @@ public class GasParticle extends Particle {
     public boolean updatePos() {
         vel.add(grav);
         pos.add(vel);
-        if (pos.x > width || pos.x < 0 || pos.y > 450 || pos.y < 0)
+        if (pos.x > width || pos.x < 0 || pos.y + radius > c.gasY() || pos.y < 0) {
+            c.addGas();
             return false;
+        }
         return true;
     }
 

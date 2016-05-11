@@ -1,12 +1,15 @@
 public class Cylinder {
     private float gasLevel; 
+    private float pistonLevel;
 
     public Cylinder() {
         gasLevel = 0.0;
+        pistonLevel = 0.0;
     }
 
     public void render() {
         drawCylinder();
+        drawPiston();
         drawGas();
     }
 
@@ -20,11 +23,55 @@ public class Cylinder {
     }
 
     private void drawGas() {
-        fill(#cc9900, 129);
-        rect(width / 2 - 125, 450 - 150 * gasLevel, 250, 150 * (gasLevel));
+        fill(#cc9900, 90);
+        rect(width / 2 - 125, pistonY() - 150 * gasLevel, 250, 150 * gasLevel);
+    }
+
+    private void drawPiston() {
+        fill(#999999);
+        rect(width / 2 - 125, 450 - 150 * pistonLevel - 25, 250, 25);
     }
 
     public void addGas() {
-        gasLevel += .001;
+        if (gasY() > topY())
+            gasLevel += .005;
+    }
+
+    public float gasLevel() {
+        return gasLevel;
+    }
+
+    public float pistonY() {
+        return 450 - 150 * pistonLevel - 25;
+    }
+
+    public float gasY() {
+        return pistonY() - 150 * gasLevel;
+    }
+
+    public int rightWallX() {
+        return width / 2 + 125;
+    }
+    
+    public int leftWallX() {
+        return width / 2 - 125;
+    }
+
+    public int topY() {
+        return height / 2 - 150;
+    }
+    
+    public int botY() {
+        return height / 2 + 150;
+    }
+
+    public void pistonUp() {
+        if (gasY() > c.topY())
+            pistonLevel += .01;
+    }
+
+    public void pistonDown() {
+        if (pistonY() < botY())
+            pistonLevel -= .01;
     }
 }
