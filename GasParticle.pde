@@ -1,9 +1,19 @@
 public class GasParticle extends Particle {
+    /**
+     * Construct an in motion gas particle
+     *
+     * @param p location to spawn gas particle
+     */
     public GasParticle(PVector p) {
         super(p);
         vel = new PVector(random(2, 6), random(3, 5));
     }
 
+    /**
+     * Render and update model of particle.
+     *
+     * @return whether particle still alive
+     */
     public boolean render() {
         if (!updatePos())
             return false;
@@ -11,8 +21,13 @@ public class GasParticle extends Particle {
         return true;
     }
 
+    /**
+     * Update position of particle and perform bounds check.
+     *
+     * @param whether posisiion valid or not
+     */
     public boolean updatePos() {
-        vel.add(grav);
+        vel.y += grav;
         pos.add(vel);
         if (pos.x > width || pos.x < 0 || pos.y + radius > c.gasY() || pos.y < 0) {
             c.addGas();
@@ -21,6 +36,9 @@ public class GasParticle extends Particle {
         return true;
     }
 
+    /**
+     * Draw model of explosion particle.
+     */
     protected void drawParticle() {
         noStroke();
         fill(#cc9900);
