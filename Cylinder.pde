@@ -89,6 +89,7 @@ public class Cylinder {
      */
     public int rightWallX() {
         return width / 2 + 125;
+    }
 
     /**
      * Return X coordinate of left cylinder wall.
