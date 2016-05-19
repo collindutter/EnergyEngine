@@ -1,6 +1,8 @@
 public class Cylinder {
     private float gasLevel; // 0.0-1.0 proportion of max gas fill level
     private float pistonLevel; // 0.0-1.0 proportion of max piston motion range
+    private Piston p;
+    private PVector pos;
 
     /**
      * Construct cylinder with fully lowered piston, and no gas.
@@ -8,6 +10,8 @@ public class Cylinder {
     public Cylinder() {
         gasLevel = 0.0;
         pistonLevel = 0.0;
+        pos = new PVector(width / 4, height / 3);
+        p = new Piston(new PVector(pos.x, botY() - 25));
     }
 
     /**
@@ -17,6 +21,7 @@ public class Cylinder {
         drawCylinder();
         drawPiston();
         drawGas();
+        //p.render();
     }
 
     /**
@@ -27,7 +32,7 @@ public class Cylinder {
         // cylinder body
         fill(#bfbfbf);
         stroke(0);
-        rect(width / 2, height / 2, 250, 300);
+        rect(pos.x, pos.y, 250, 300);
         rectMode(CORNER);
     }
 
@@ -36,7 +41,7 @@ public class Cylinder {
      */
     private void drawGas() {
         fill(#cc9900, 90);
-        rect(width / 2 - 125, pistonY() - 150 * gasLevel, 250, 150 * gasLevel);
+        rect(pos.x - 125, pistonY() - 150 * gasLevel, 250, 150 * gasLevel);
     }
 
     /**
@@ -44,7 +49,7 @@ public class Cylinder {
      */
     private void drawPiston() {
         fill(#999999);
-        rect(width / 2 - 125, 450 - 150 * pistonLevel - 25, 250, 25);
+        rect(pos.x - 125, botY() - 150 * pistonLevel - 25, 250, 25);
     }
 
     /**
@@ -70,7 +75,7 @@ public class Cylinder {
      * @return Y coordinate of top of piston
      */
     public float pistonY() {
-        return 450 - 150 * pistonLevel - 25;
+        return botY() - 150 * pistonLevel - 25;
     }
 
     /**
@@ -87,8 +92,8 @@ public class Cylinder {
      *
      * @return X coordinate of right cylinder wall
      */
-    public int rightWallX() {
-        return width / 2 + 125;
+    public float rightWallX() {
+        return pos.x + 125;
     }
 
     /**
@@ -96,8 +101,8 @@ public class Cylinder {
      *
      * @return X coordinate of left cylinder wall
      */
-    public int leftWallX() {
-        return width / 2 - 125;
+    public float leftWallX() {
+        return pos.x - 125;
     }
 
     /**
@@ -105,8 +110,8 @@ public class Cylinder {
      *
      * @return Y coordinate of cylinder ceiling.
      */
-    public int topY() {
-        return height / 2 - 150;
+    public float topY() {
+        return pos.y - 150;
     }
     
     /**
@@ -114,8 +119,8 @@ public class Cylinder {
      *
      * @return Y coordinate of cylinder floor.
      */
-    public int botY() {
-        return height / 2 + 150;
+    public float botY() {
+        return pos.y + 150;
     }
 
     /**
@@ -130,7 +135,7 @@ public class Cylinder {
      * Lower piston.
      */
     public void pistonDown() {
-        if (pistonY() < botY())
-            pistonLevel -= .01;
+        if (pistonY() < botY() - 25)
+            pistonLevel -= .03;
     }
 }

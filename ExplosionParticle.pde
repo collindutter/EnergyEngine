@@ -9,7 +9,7 @@ public class ExplosionParticle extends Particle {
      */
     public ExplosionParticle(PVector p)  {
         super(p);
-        vel = new PVector(random(-5, 5), random(-5, 5));
+        vel = new PVector(random(-3, 3), random(-10, 10));
         life = 1.0;
         fillColor = color(255, random(128, 255), 0);
     }
@@ -23,6 +23,9 @@ public class ExplosionParticle extends Particle {
             return false;
         life -= .01;
         drawParticle();
+
+        if (pos.y > c.pistonY())
+            c.pistonDown();
         return true;
     }
 
@@ -36,6 +39,7 @@ public class ExplosionParticle extends Particle {
         if (pos.y + radius >= c.pistonY() || pos.y - radius <= c.topY())
             vel.y = -vel.y;
     }
+
         
     /**
      * Draw model of explosion particle.

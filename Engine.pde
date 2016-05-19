@@ -1,5 +1,6 @@
 ArrayList<Particle> particles;
 Cylinder c;
+Magnifier mag;
 void setup() {
     size(800, 600);
     init();
@@ -8,6 +9,7 @@ void setup() {
 void init() {
     c = new Cylinder();
     particles = new ArrayList<Particle>();
+    mag = new Magnifier();
 }
 
 void draw() {
@@ -18,9 +20,9 @@ void draw() {
         if (!particles.get(ndx).render())
             particles.remove(ndx--);
 
-    if (mousePressed) {
-        particles.add(new GasParticle(new PVector(275, 150)));
-    }
+    if (mousePressed)
+        particles.add(new GasParticle(new PVector(c.leftWallX(), c.topY())));
+    mag.render();
     text(frameRate, 20, 20);
 }
 
@@ -36,7 +38,7 @@ void keyPressed(KeyEvent e) {
 }
 
 void explode() {
-    for (int ndx = 0; ndx < 50; ndx++) {
-        particles.add(new ExplosionParticle(new PVector(width / 2 + random(-10, 10), (c.gasY() + c.pistonY()) / 2)));
+    for (int ndx = 0; ndx < 100; ndx++) {
+        particles.add(new ExplosionParticle(new PVector(c.pos.x + random(-10, 10), c.topY() + 10)));
     }
 }
