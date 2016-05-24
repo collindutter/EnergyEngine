@@ -19,9 +19,9 @@ public class Cylinder {
      */
     public void render() {
         drawCylinder();
-        drawPiston();
+        //drawPiston();
         drawGas();
-        //p.render();
+        p.render();
     }
 
     /**
@@ -40,8 +40,8 @@ public class Cylinder {
      * Render gas according to current gas level.
      */
     private void drawGas() {
-        fill(#cc9900, 90);
-        rect(pos.x - 125, pistonY() - 150 * gasLevel, 250, 150 * gasLevel);
+        fill(#cc9900, 80);
+        rect(pos.x - 125, pistonY() - 100 * gasLevel, 250, 100 * gasLevel);
     }
 
     /**
@@ -75,7 +75,8 @@ public class Cylinder {
      * @return Y coordinate of top of piston
      */
     public float pistonY() {
-        return botY() - 150 * pistonLevel - 25;
+        return p.pistonY();
+        //return botY() - 150 * pistonLevel - 25;
     }
 
     /**
@@ -84,7 +85,7 @@ public class Cylinder {
      * @return Y coordinate of top of gas level
      */
     public float gasY() {
-        return pistonY() - 150 * gasLevel;
+        return pistonY() - 100 * gasLevel;
     }
 
     /**
@@ -127,15 +128,17 @@ public class Cylinder {
      * Raise piston.
      */
     public void pistonUp() {
-        if (gasY() > c.topY())
-            pistonLevel += .01;
+        //if (gasY() > c.topY())
+            //pistonLevel += .01;
+        p.pistonUp();
     }
 
     /**
      * Lower piston.
      */
     public void pistonDown() {
-        if (pistonY() < botY() - 25)
-            pistonLevel -= .03;
+        //if (pistonY() < botY() - 25)
+            //pistonLevel -= .03;
+        p.pistonDown();
     }
 }
