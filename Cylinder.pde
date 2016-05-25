@@ -1,8 +1,10 @@
 public class Cylinder {
     private float gasLevel; // 0.0-1.0 proportion of max gas fill level
+    private float gasOpacity;
     private float pistonLevel; // 0.0-1.0 proportion of max piston motion range
     private Piston p;
     private PVector pos;
+    private boolean ignit;
 
     /**
      * Construct cylinder with fully lowered piston, and no gas.
@@ -10,6 +12,8 @@ public class Cylinder {
     public Cylinder() {
         gasLevel = 0.0;
         pistonLevel = 0.0;
+        gasOpacity = 80;
+        ignit = false;
         pos = new PVector(width / 4, height / 3);
         p = new Piston(new PVector(pos.x, botY() - 25));
     }
@@ -18,8 +22,18 @@ public class Cylinder {
      * Render all models within cylinder.
      */
     public void render() {
+        //println(gasLevel, gasOpacity);
+        if (ignit && gasLevel > 0 && gasOpacity > 0) {
+            gasLevel -= .05;
+            gasOpacity -= .05;
+        }
+        if (gasLevel <= 0 || gasOpacity <= 0) {
+            gasLevel = 0;
+            ignit = false;
+        }
         drawCylinder();
-        //drawPiston();
+        drawSparkButton();
+        drawGasFunnel();
         drawGas();
         p.render();
     }
@@ -30,17 +44,41 @@ public class Cylinder {
     private void drawCylinder() {
         rectMode(CENTER);
         // cylinder body
-        fill(#bfbfbf);
         stroke(0);
+        fill(#bfbfbf);
         rect(pos.x, pos.y, 250, 300);
         rectMode(CORNER);
+    }
+
+    private void drawSparkButton() {
+        rectMode(CENTER);
+        fill(#ff0000);
+        stroke(0);
+        rect(pos.x, topY() - 10, 50, 20);
+        rectMode(CORNER);
+    }
+
+    private void drawGasFunnel() {
+        rectMode(CENTER);
+        fill(#bfbfbf);
+        stroke(0);
+        rect(leftWallX() - 25, topY() + 7.5, 50, 15);
+        fill(#ff0000);
+        rect(leftWallX() - 25, topY() + 22.5, 30, 15);
+        rectMode(CORNER);
+        fill(#bfbfbf);
+        rect(leftWallX() - 50, -5, 15, topY() + 5);
+    }
+
+    public boolean fuelButtonClicked(PVector p) {
+        return p.x > leftWallX() - 50 && p.x < leftWallX() && p.y > topY() + 15 && p.y < topY() + 30;
     }
 
     /**
      * Render gas according to current gas level.
      */
     private void drawGas() {
-        fill(#cc9900, 80);
+        fill(#cc9900, gasOpacity);
         rect(pos.x - 125, pistonY() - 100 * gasLevel, 250, 100 * gasLevel);
     }
 
@@ -76,7 +114,6 @@ public class Cylinder {
      */
     public float pistonY() {
         return p.pistonY();
-        //return botY() - 150 * pistonLevel - 25;
     }
 
     /**
@@ -128,8 +165,6 @@ public class Cylinder {
      * Raise piston.
      */
     public void pistonUp() {
-        //if (gasY() > c.topY())
-            //pistonLevel += .01;
         p.pistonUp();
     }
 
@@ -137,8 +172,16 @@ public class Cylinder {
      * Lower piston.
      */
     public void pistonDown() {
-        //if (pistonY() < botY() - 25)
-            //pistonLevel -= .03;
         p.pistonDown();
+    }
+
+    public void ignite() {
+        for (int ndx = 0; ndx < 200; ndx++)
+            particles.add(new ExplosionParticle(new PVector(c.pos.x + random(-10, 10), c.topY() + 10)));
+        ignit = true;
+    }
+
+    public boolean sparkButtonClicked(PVector p) {
+        return p.x > pos.x - 25 && p.x < pos.x + 25 && p.y > topY() - 20 && p.y < topY();
     }
 }

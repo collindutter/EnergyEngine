@@ -29,7 +29,7 @@ public class Piston {
 
     public void pistonDown() {
         if (pistonY() < c.botY() - 25)
-            pistonLevel -= .03;
+            pistonLevel -= .06;
     }
 
     public float pistonY() {

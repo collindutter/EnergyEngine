@@ -1,3 +1,8 @@
+// TODO Add spark
+// TODO Add subanimation
+// TODO Add mechanical motion
+// TODO Better explosion
+// TODO Add spark button, fuel button
 ArrayList<Particle> particles;
 Cylinder c;
 Magnifier mag;
@@ -20,25 +25,25 @@ void draw() {
         if (!particles.get(ndx).render())
             particles.remove(ndx--);
 
-    if (mousePressed)
-        particles.add(new GasParticle(new PVector(c.leftWallX(), c.topY())));
+    if (mousePressed && c.fuelButtonClicked(new PVector(mouseX, mouseY)))
+        particles.add(new GasParticle(new PVector(c.leftWallX() + 1.5, c.topY() + 5)));
     mag.render();
-    text(frameRate, 20, 20);
 }
 
 void keyPressed(KeyEvent e) {
     if (key == 'r')
         init();
     if (key == 'f')
-        explode();
+        c.ignite();
     if (keyCode == UP)
         c.pistonUp();
     if (keyCode == DOWN)
         c.pistonDown();
 }
 
-void explode() {
-    for (int ndx = 0; ndx < 100; ndx++) {
-        particles.add(new ExplosionParticle(new PVector(c.pos.x + random(-10, 10), c.topY() + 10)));
-    }
+void mousePressed() {
+    PVector m = new PVector(mouseX, mouseY);
+
+    if (c.sparkButtonClicked(m))
+        c.ignite();
 }
