@@ -1,4 +1,4 @@
-public class ExplosionParticle extends Particle {
+public class ElectricParticle extends Particle {
     private float life; // falls from 1.0 to 0.0 as the explosion particle dies
     private color fillColor; // explosion particle fill color
 
@@ -7,11 +7,14 @@ public class ExplosionParticle extends Particle {
      *
      * @param p location to spawn gas particle
      */
-    public ExplosionParticle(PVector p)  {
+    public ElectricParticle(PVector p)  {
         super(p);
-        vel = new PVector(random(-10, 10), random(7, 13));
+        vel = new PVector(random(-2, 2), random(-2, 2));
         life = 1.0;
-        fillColor = color(255, random(128, 255), 0);
+        if (random(0, 1) > .2)
+            fillColor = color(0, random(160, 190), 212);
+        else
+            fillColor = color(255, 255, 255);
     }
 
     /**
@@ -21,10 +24,10 @@ public class ExplosionParticle extends Particle {
         updatePos();
         if (life <= 0)
             return false;
-        life -= .01;
+        life -= .05;
         drawParticle();
 
-        if (pos.y + radius >= c.pistonY() && life >= .6)
+        if (pos.y + radius >= c.pistonY())
             c.pistonDown();
         return true;
     }
@@ -39,7 +42,6 @@ public class ExplosionParticle extends Particle {
         if (pos.y + 2 * radius >= c.pistonY() || pos.y - radius <= c.topY())
             vel.y = -vel.y;
     }
-
         
     /**
      * Draw model of explosion particle.

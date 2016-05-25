@@ -5,6 +5,9 @@ public class Cylinder {
     private Piston p;
     private PVector pos;
     private boolean ignit;
+    private boolean sparkButtonPressed;
+    private long sparkButtonPressedTime;
+    private boolean fuelButtonPressed;
 
     /**
      * Construct cylinder with fully lowered piston, and no gas.
@@ -14,6 +17,9 @@ public class Cylinder {
         pistonLevel = 0.0;
         gasOpacity = 80;
         ignit = false;
+        sparkButtonPressed = false;
+        sparkButtonPressedTime = millis();
+        fuelButtonPressed = false;
         pos = new PVector(width / 4, height / 3);
         p = new Piston(new PVector(pos.x, botY() - 25));
     }
@@ -31,6 +37,9 @@ public class Cylinder {
             gasLevel = 0;
             ignit = false;
         }
+
+        if (millis() - sparkButtonPressedTime > 200)
+            sparkButtonPressed = false;
         drawCylinder();
         drawSparkButton();
         drawGasFunnel();
@@ -51,11 +60,20 @@ public class Cylinder {
     }
 
     private void drawSparkButton() {
-        rectMode(CENTER);
-        fill(#ff0000);
-        stroke(0);
-        rect(pos.x, topY() - 10, 50, 20);
-        rectMode(CORNER);
+        if (!sparkButtonPressed) {
+            rectMode(CENTER);
+            fill(#ff0000);
+            stroke(0);
+            rect(pos.x, topY() - 10, 50, 20);
+            rectMode(CORNER);
+        }
+        else {
+            rectMode(CENTER);
+            fill(#ff0000);
+            stroke(0);
+            rect(pos.x, topY() - 5, 50, 10);
+            rectMode(CORNER);
+        }
     }
 
     private void drawGasFunnel() {
@@ -63,15 +81,25 @@ public class Cylinder {
         fill(#bfbfbf);
         stroke(0);
         rect(leftWallX() - 25, topY() + 7.5, 50, 15);
-        fill(#ff0000);
-        rect(leftWallX() - 25, topY() + 22.5, 30, 15);
+        if (!fuelButtonPressed) {
+            fill(#ff0000);
+            rect(leftWallX() - 25, topY() + 22.5, 30, 15);
+        }
+        else {
+            fill(#ff0000);
+            rect(leftWallX() - 25, topY() + 19, 30, 7.5);
+        }
         rectMode(CORNER);
         fill(#bfbfbf);
         rect(leftWallX() - 50, -5, 15, topY() + 5);
     }
 
     public boolean fuelButtonClicked(PVector p) {
-        return p.x > leftWallX() - 50 && p.x < leftWallX() && p.y > topY() + 15 && p.y < topY() + 30;
+        if (p.x > leftWallX() - 50 && p.x < leftWallX() && p.y > topY() + 15 && p.y < topY() + 30) {
+            fuelButtonPressed = true;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -176,12 +204,19 @@ public class Cylinder {
     }
 
     public void ignite() {
-        for (int ndx = 0; ndx < 200; ndx++)
-            particles.add(new ExplosionParticle(new PVector(c.pos.x + random(-10, 10), c.topY() + 10)));
+        for (int ndx = 0; ndx < 200 * c.gasLevel(); ndx++)
+            particles.add(new ExplosionParticle(new PVector(c.pos.x + random(-10, 10), c.topY() + 3)));
+        for (int ndx = 0; ndx < 50; ndx++)
+            particles.add(new ElectricParticle(new PVector(c.pos.x, c.topY() + 4)));
         ignit = true;
     }
 
     public boolean sparkButtonClicked(PVector p) {
-        return p.x > pos.x - 25 && p.x < pos.x + 25 && p.y > topY() - 20 && p.y < topY();
+        if (p.x > pos.x - 25 && p.x < pos.x + 25 && p.y > topY() - 20 && p.y < topY()) {
+            sparkButtonPressed = true;
+            sparkButtonPressedTime = millis();
+            return true;
+        }
+        return false;
     }
 }

@@ -27,6 +27,8 @@ void draw() {
 
     if (mousePressed && c.fuelButtonClicked(new PVector(mouseX, mouseY)))
         particles.add(new GasParticle(new PVector(c.leftWallX() + 1.5, c.topY() + 5)));
+    else
+        c.fuelButtonPressed = false;
     mag.render();
 }
 

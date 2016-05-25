@@ -23,17 +23,17 @@ public class Piston {
     }
     
     public void pistonUp() {
-        if (c.gasY() > c.topY() && pistonY() >= c.botY() - 25 - 150)
-            pistonLevel += .03;
+        if (c.gasY() >= c.topY() + 1 && pistonY() + 173 >= c.botY())
+            pistonLevel += .02;
     }
 
     public void pistonDown() {
         if (pistonY() < c.botY() - 25)
-            pistonLevel -= .06;
+            pistonLevel -= .02;
     }
 
     public float pistonY() {
-        return pos.y - 100 * pistonLevel;
+        return pos.y - 100.0 * pistonLevel;
     }
 
 }
