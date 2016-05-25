@@ -26,17 +26,22 @@ public class Cylinder {
      * Render all models within cylinder.
      */
     public void render() {
-        if (gasLevel <= 0)
+        if (gasLevel < 0) {
             gasLevel = 0;
-        if (ignit && p.pistonLevel > 0 && gasLevel > 0) {
-            gasLevel -= .02;
+            ignit = false;
+        }
+
+        if (ignit) {
+            gasLevel += c.p.vel.y / 2;
         }
         if (p.pistonLevel <= 0) {
             p.pistonLevel = 0;
             ignit = false;
         }
+
         if (millis() - sparkButtonPressedTime > 200)
             sparkButtonPressed = false;
+
         drawCylinder();
         drawSparkButton();
         drawGasFunnel();

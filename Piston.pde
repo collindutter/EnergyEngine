@@ -6,7 +6,7 @@ public class Piston {
     public Piston(PVector p) {
         pos = p;
         pistonLevel = 0;
-        vel = new PVector(0, -.02);
+        vel = new PVector(0, -.3);
     }
 
     public void render() {
