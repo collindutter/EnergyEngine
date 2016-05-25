@@ -12,7 +12,7 @@ public class ElectricParticle extends Particle {
         vel = new PVector(random(-2, 2), random(-2, 2));
         life = 1.0;
         if (random(0, 1) > .2)
-            fillColor = color(0, random(160, 190), 212);
+            fillColor = color(255, 230, random(45, 90));
         else
             fillColor = color(255, 255, 255);
     }

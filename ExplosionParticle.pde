@@ -9,7 +9,7 @@ public class ExplosionParticle extends Particle {
      */
     public ExplosionParticle(PVector p)  {
         super(p);
-        vel = new PVector(random(-10, 10), random(7, 13));
+        vel = new PVector(random(-10, 10), random(13, 17));
         life = 1.0;
         fillColor = color(255, random(128, 255), 0);
     }
@@ -34,9 +34,9 @@ public class ExplosionParticle extends Particle {
      */
     private void updatePos() {
         pos.add(vel);
-        if (pos.x + radius >= c.rightWallX() || pos.x - radius <= c.leftWallX())
+        if (pos.x + radius >= c.rightWallX() - 3 || pos.x - radius <= c.leftWallX() + 3)
             vel.x = -vel.x;
-        if (pos.y + 2 * radius >= c.pistonY() || pos.y - radius <= c.topY())
+        if (pos.y + radius >= c.p.pistonTopY() || pos.y - radius <= c.topY())
             vel.y = -vel.y;
     }
 

@@ -1,8 +1,6 @@
-// TODO Add spark
 // TODO Add subanimation
 // TODO Add mechanical motion
 // TODO Better explosion
-// TODO Add spark button, fuel button
 ArrayList<Particle> particles;
 Cylinder c;
 Magnifier mag;

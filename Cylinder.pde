@@ -1,7 +1,6 @@
 public class Cylinder {
     private float gasLevel; // 0.0-1.0 proportion of max gas fill level
-    private float gasOpacity;
-    private float pistonLevel; // 0.0-1.0 proportion of max piston motion range
+    //private float gasOpacity;
     private Piston p;
     private PVector pos;
     private boolean ignit;
@@ -14,8 +13,7 @@ public class Cylinder {
      */
     public Cylinder() {
         gasLevel = 0.0;
-        pistonLevel = 0.0;
-        gasOpacity = 80;
+        //gasOpacity = 80;
         ignit = false;
         sparkButtonPressed = false;
         sparkButtonPressedTime = millis();
@@ -28,16 +26,15 @@ public class Cylinder {
      * Render all models within cylinder.
      */
     public void render() {
-        //println(gasLevel, gasOpacity);
-        if (ignit && gasLevel > 0 && gasOpacity > 0) {
-            gasLevel -= .05;
-            gasOpacity -= .05;
-        }
-        if (gasLevel <= 0 || gasOpacity <= 0) {
+        if (gasLevel <= 0)
             gasLevel = 0;
+        if (ignit && p.pistonLevel > 0 && gasLevel > 0) {
+            gasLevel -= .02;
+        }
+        if (p.pistonLevel <= 0) {
+            p.pistonLevel = 0;
             ignit = false;
         }
-
         if (millis() - sparkButtonPressedTime > 200)
             sparkButtonPressed = false;
         drawCylinder();
@@ -106,17 +103,10 @@ public class Cylinder {
      * Render gas according to current gas level.
      */
     private void drawGas() {
-        fill(#cc9900, gasOpacity);
+        fill(#cc9900, 80);
         rect(pos.x - 125, pistonY() - 100 * gasLevel, 250, 100 * gasLevel);
     }
 
-    /**
-     * Render model of piston.
-     */
-    private void drawPiston() {
-        fill(#999999);
-        rect(pos.x - 125, botY() - 150 * pistonLevel - 25, 250, 25);
-    }
 
     /**
      * Add gas to cylinder if room.
